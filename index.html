@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Олег Лощенок — Android Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Unbounded:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #06080f;
+      --surface: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.08);
+      --text: #e8ecf4;
+      --muted: #8b95a8;
+      --accent: #3ddc84;
+      --accent2: #00e5ff;
+      --accent3: #a855f7;
+      --glow: rgba(61, 220, 132, 0.35);
+      --font-display: 'Unbounded', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent) var(--bg);
+    }
+
+    body {
+      font-family: var(--font-mono);
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      cursor: none;
+      line-height: 1.65;
+    }
+
+    ::selection {
+      background: var(--accent);
+      color: var(--bg);
+    }
+
+    /* ── Custom Cursor ── */
+    .cursor-dot, .cursor-ring {
+      position: fixed;
+      top: 0; left: 0;
+      pointer-events: none;
+      z-index: 99999;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      will-change: transform;
+    }
+
+    .cursor-dot {
+      width: 6px; height: 6px;
+      background: var(--accent);
+      transition: width 0.3s var(--ease-out), height 0.3s var(--ease-out), background 0.3s;
+    }
+
+    .cursor-ring {
+      width: 40px; height: 40px;
+      border: 1.5px solid rgba(61, 220, 132, 0.5);
+      transition: width 0.4s var(--ease-out), height 0.4s var(--ease-out),
+                  border-color 0.3s, opacity 0.3s;
+    }
+
+    body.cursor-hover .cursor-dot { width: 12px; height: 12px; background: var(--accent2); }
+    body.cursor-hover .cursor-ring { width: 60px; height: 60px; border-color: rgba(0, 229, 255, 0.6); }
+
+    @media (hover: none), (pointer: coarse) {
+      body { cursor: auto; }
+      .cursor-dot, .cursor-ring { display: none; }
+    }
+
+    /* ── Background ── */
+    .bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.45;
+      will-change: transform;
+    }
+
+    .orb-1 {
+      width: 55vw; height: 55vw;
+      background: radial-gradient(circle, #3ddc84 0%, transparent 70%);
+      top: -15%; left: -10%;
+      animation: float1 18s ease-in-out infinite;
+    }
+
+    .orb-2 {
+      width: 45vw; height: 45vw;
+      background: radial-gradient(circle, #00e5ff 0%, transparent 70%);
+      bottom: -10%; right: -15%;
+      animation: float2 22s ease-in-out infinite;
+    }
+
+    .orb-3 {
+      width: 35vw; height: 35vw;
+      background: radial-gradient(circle, #a855f7 0%, transparent 70%);
+      top: 40%; left: 50%;
+      animation: float3 26s ease-in-out infinite;
+    }
+
+    @keyframes float1 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(8vw, 6vh) scale(1.08); }
+      66% { transform: translate(-4vw, 10vh) scale(0.95); }
+    }
+
+    @keyframes float2 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-10vw, -8vh) scale(1.1); }
+    }
+
+    @keyframes float3 {
+      0%, 100% { transform: translate(-50%, 0) scale(1); }
+      50% { transform: translate(-50%, -12vh) scale(1.15); }
+    }
+
+    .grid-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 20%, transparent 80%);
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    /* ── Layout ── */
+    .wrapper {
+      position: relative;
+      z-index: 10;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      display: flex;
+      gap: 6px;
+      padding: 8px 12px;
+      background: rgba(10, 14, 24, 0.65);
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      opacity: 0;
+      animation: navIn 1s var(--ease-out) 0.5s forwards;
+    }
+
+    @keyframes navIn {
+      from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+      to { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    nav a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.72rem;
+      padding: 8px 16px;
+      border-radius: 100px;
+      transition: color 0.3s, background 0.3s;
+      letter-spacing: 0.02em;
+    }
+
+    nav a:hover, nav a.active {
+      color: var(--text);
+      background: rgba(61, 220, 132, 0.12);
+    }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 120px 0 80px;
+      position: relative;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      color: var(--accent);
+      margin-bottom: 32px;
+      backdrop-filter: blur(12px);
+      opacity: 0;
+      animation: fadeUp 0.8s var(--ease-out) 0.2s forwards;
+    }
+
+    .hero-badge .pulse {
+      width: 8px; height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(61, 220, 132, 0.6); }
+      50% { box-shadow: 0 0 0 8px rgba(61, 220, 132, 0); }
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.4rem, 7vw, 5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 .line {
+      display: block;
+      overflow: hidden;
+    }
+
+    .hero h1 .word {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(110%);
+      animation: wordReveal 0.9s var(--ease-out) forwards;
+    }
+
+    .hero h1 .line:nth-child(1) .word { animation-delay: 0.35s; }
+    .hero h1 .line:nth-child(2) .word { animation-delay: 0.5s; }
+
+    @keyframes wordReveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 4s linear infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+
+    .hero-sub {
+      font-size: clamp(0.95rem, 2vw, 1.15rem);
+      color: var(--muted);
+      max-width: 560px;
+      margin-bottom: 40px;
+      opacity: 0;
+      animation: fadeUp 0.8s var(--ease-out) 0.7s forwards;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 36px;
+      position: relative;
+      z-index: 2;
+      opacity: 0;
+      animation: fadeUp 0.8s var(--ease-out) 0.85s forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      border-radius: 14px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      border: none;
+      cursor: none;
+      transition: transform 0.3s var(--ease-spring), box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #2bb86a);
+      color: var(--bg);
+      box-shadow: 0 4px 30px var(--glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 8px 40px var(--glow);
+    }
+
+    .btn-ghost {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+    }
+
+    .btn-ghost:hover {
+      transform: translateY(-3px);
+      border-color: rgba(61, 220, 132, 0.3);
+      background: rgba(61, 220, 132, 0.08);
+    }
+
+    .hero-scroll {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp 0.8s var(--ease-out) 1.2s forwards;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 48px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { transform: scaleY(1); opacity: 1; }
+      50% { transform: scaleY(0.5); opacity: 0.4; }
+    }
+
+    /* ── Skills strip ── */
+    .skills-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 0 0 80px;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      animation: fadeUp 0.8s var(--ease-out) 1s forwards;
+    }
+
+    .skill-tag {
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      transition: all 0.35s var(--ease-out);
+      backdrop-filter: blur(8px);
+    }
+
+    .skill-tag:hover {
+      color: var(--accent);
+      border-color: rgba(61, 220, 132, 0.35);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(61, 220, 132, 0.12);
+    }
+
+    /* ── Sections ── */
+    section {
+      padding: 80px 0;
+    }
+
+    .section-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 600;
+      margin-bottom: 48px;
+      letter-spacing: -0.02em;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(50px);
+      transition: opacity 0.9s var(--ease-out), transform 0.9s var(--ease-out);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+
+    /* ── Glass Card ── */
+    .glass {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px;
+      backdrop-filter: blur(16px) saturate(1.3);
+      -webkit-backdrop-filter: blur(16px) saturate(1.3);
+      transition: transform 0.4s var(--ease-out), border-color 0.4s, box-shadow 0.4s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .glass::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(61,220,132,0.06) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .glass:hover {
+      transform: translateY(-6px);
+      border-color: rgba(61, 220, 132, 0.2);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(61, 220, 132, 0.06);
+    }
+
+    .glass:hover::before { opacity: 1; }
+
+    .about-text {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    /* ── Timeline ── */
+    .timeline {
+      position: relative;
+      padding-left: 32px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--accent), var(--accent2), var(--accent3));
+      border-radius: 2px;
+    }
+
+    .timeline-item {
+      position: relative;
+      margin-bottom: 40px;
+    }
+
+    .timeline-item:last-child { margin-bottom: 0; }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -36px;
+      top: 8px;
+      width: 10px;
+      height: 10px;
+      background: var(--bg);
+      border: 2px solid var(--accent);
+      border-radius: 50%;
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+
+    .timeline-item:hover::before {
+      background: var(--accent);
+      box-shadow: 0 0 16px var(--glow);
+    }
+
+    .timeline-date {
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+    }
+
+    .timeline-title {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .timeline-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .timeline-list li {
+      font-size: 0.85rem;
+      color: var(--muted);
+      padding-left: 18px;
+      position: relative;
+    }
+
+    .timeline-list li::before {
+      content: '▹';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    .link {
+      color: var(--accent2);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s;
+    }
+
+    .link:hover { border-bottom-color: var(--accent2); }
+
+    /* ── Grid ── */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    /* ── Achievements ── */
+    .achievements {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .achievement {
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      backdrop-filter: blur(12px);
+      transition: all 0.4s var(--ease-out);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .achievement-icon {
+      font-size: 1.6rem;
+      margin-bottom: 12px;
+      display: block;
+      transition: transform 0.4s var(--ease-spring);
+    }
+
+    .achievement:hover {
+      transform: translateY(-8px) scale(1.02);
+      border-color: rgba(168, 85, 247, 0.3);
+      box-shadow: 0 16px 48px rgba(168, 85, 247, 0.12);
+    }
+
+    .achievement:hover .achievement-icon {
+      transform: scale(1.2) rotate(-8deg);
+    }
+
+    .achievement-text {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    /* ── Why X5 ── */
+    .why-block {
+      background: linear-gradient(135deg, rgba(61,220,132,0.08) 0%, rgba(0,229,255,0.05) 50%, rgba(168,85,247,0.06) 100%);
+      border: 1px solid rgba(61, 220, 132, 0.15);
+      border-radius: 24px;
+      padding: 48px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .why-block::after {
+      content: 'X5';
+      position: absolute;
+      right: -20px;
+      bottom: -30px;
+      font-family: var(--font-display);
+      font-size: 12rem;
+      font-weight: 800;
+      color: rgba(255,255,255,0.02);
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    .why-text {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.85;
+      max-width: 720px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Contact ── */
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      margin-top: 32px;
+      align-items: stretch;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .contact-card {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.35s var(--ease-out);
+      backdrop-filter: blur(12px);
+    }
+
+    .contact-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(0, 229, 255, 0.3);
+      box-shadow: 0 12px 40px rgba(0, 229, 255, 0.1);
+    }
+
+    .contact-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .contact-value {
+      font-size: 0.88rem;
+      color: var(--text);
+    }
+
+    .qr-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 24px;
+      min-width: 220px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      backdrop-filter: blur(16px) saturate(1.3);
+      -webkit-backdrop-filter: blur(16px) saturate(1.3);
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.4s var(--ease-out);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .qr-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(0,229,255,0.08) 0%, transparent 55%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .qr-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(0, 229, 255, 0.35);
+      box-shadow: 0 16px 48px rgba(0, 229, 255, 0.12);
+    }
+
+    .qr-card:hover::before { opacity: 1; }
+
+    .qr-frame {
+      position: relative;
+      z-index: 1;
+      padding: 12px;
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 8px 32px rgba(0, 229, 255, 0.15);
+    }
+
+    .qr-frame canvas,
+    .qr-frame img {
+      display: block;
+      width: 148px;
+      height: 148px;
+      border-radius: 4px;
+    }
+
+    .qr-meta {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .qr-meta .contact-label { margin-bottom: 4px; }
+    .qr-meta .contact-value { color: var(--accent2); font-size: 0.82rem; }
+
+    footer {
+      text-align: center;
+      padding: 60px 0 40px;
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+
+    footer span { color: var(--accent); }
+
+    /* ── Parallax layers ── */
+    [data-parallax] {
+      will-change: transform;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      nav { display: none; }
+      .hero { padding-top: 80px; }
+      .why-block { padding: 28px; }
+      .why-block::after { font-size: 6rem; }
+      .glass { padding: 24px; }
+      .contact-layout {
+        grid-template-columns: 1fr;
+      }
+      .contact-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .qr-card {
+        min-width: 0;
+        width: 100%;
+      }
+      .contact-value {
+        font-size: 0.78rem;
+        word-break: break-all;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <div class="bg-canvas" aria-hidden="true">
+    <div class="orb orb-1" data-parallax="0.03"></div>
+    <div class="orb orb-2" data-parallax="-0.02"></div>
+    <div class="orb orb-3" data-parallax="0.015"></div>
+  </div>
+  <div class="grid-overlay" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
+
+  <nav>
+    <a href="#about">О себе</a>
+    <a href="#experience">Опыт</a>
+    <a href="#education">Образование</a>
+    <a href="#achievements">Достижения</a>
+    <a href="#contact">Контакты</a>
+  </nav>
+
+  <div class="wrapper">
+
+    <header class="hero">
+      <div class="hero-badge">
+        <span class="pulse"></span>
+        Открыт к стажировке · Москва
+      </div>
+
+      <h1 data-parallax="0.01">
+        <span class="line"><span class="word">Олег</span></span>
+        <span class="line"><span class="word gradient-text">Лощенок</span></span>
+      </h1>
+
+      <p class="hero-sub">Android-разработчик · Kotlin · Jetpack Compose · KMP</p>
+
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary magnetic">Связаться</a>
+        <a href="https://github.com/gpsplpd/Android-Bootcamp-2026-Frontend" target="_blank" rel="noopener" class="btn btn-ghost magnetic">GitHub проект</a>
+      </div>
+
+      <div class="skills-strip">
+        <span class="skill-tag">Kotlin</span>
+        <span class="skill-tag">Jetpack Compose</span>
+        <span class="skill-tag">KMP</span>
+        <span class="skill-tag">Coroutines</span>
+        <span class="skill-tag">Ktor</span>
+        <span class="skill-tag">Clean + MVVM</span>
+        <span class="skill-tag">Git</span>
+        <span class="skill-tag">Java</span>
+      </div>
+
+      <div class="hero-scroll">
+        <span>Scroll</span>
+        <div class="scroll-line"></div>
+      </div>
+    </header>
+
+    <section id="about">
+      <p class="section-label reveal">01 — О себе</p>
+      <h2 class="section-title reveal reveal-delay-1">Кто я</h2>
+      <div class="glass reveal reveal-delay-2">
+        <p class="about-text">
+          Начинающий Android-разработчик. Изучаю Kotlin, Jetpack Compose и Kotlin Multiplatform.
+          Участвовал в летней школе X5 Tech по мобильной разработке на KMP. Прошёл курсы по Java,
+          Kotlin и Android на Stepik. Участвую в хакатонах и чемпионатах («Профессионалы», WorldSkills,
+          Samsung Android BootCamp 2026). Быстро учусь, готов вкладываться в реальные задачи
+          и работать в команде.
+        </p>
+      </div>
+    </section>
+
+    <section id="experience">
+      <p class="section-label reveal">02 — Опыт</p>
+      <h2 class="section-title reveal reveal-delay-1">Учебные проекты</h2>
+      <div class="timeline">
+        <div class="glass timeline-item reveal reveal-delay-2">
+          <p class="timeline-date">2026 · Samsung Android BootCamp</p>
+          <h3 class="timeline-title">Клиентская часть приложения для планирования встреч</h3>
+          <ul class="timeline-list">
+            <li>Разработка на Kotlin + Jetpack Compose</li>
+            <li>Основы Ktor, Coroutines, архитектура Clean + MVVM</li>
+            <li>Работа с Git в команде</li>
+          </ul>
+          <p style="margin-top: 16px; font-size: 0.82rem;">
+            <a href="https://github.com/gpsplpd/Android-Bootcamp-2026-Frontend" target="_blank" rel="noopener" class="link">github.com/gpsplpd/Android-Bootcamp-2026-Frontend</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="education">
+      <p class="section-label reveal">03 — Образование</p>
+      <h2 class="section-title reveal reveal-delay-1">Учёба и курсы</h2>
+      <div class="grid-2">
+        <div class="glass reveal reveal-delay-2">
+          <p class="timeline-date">Сентябрь 2025 — Июль 2029</p>
+          <h3 class="timeline-title">РТУ МИРЭА, Москва</h3>
+          <p class="about-text">
+            Бакалавриат, очная форма — специальность 09.03.02 «Информационные системы и технологии».
+            Направление: «Разработка кроссплатформенных бизнес-приложений».
+          </p>
+        </div>
+        <div class="glass reveal reveal-delay-3">
+          <h3 class="timeline-title" style="margin-bottom: 16px;">Дополнительные курсы</h3>
+          <ul class="timeline-list">
+            <li>Фев 2026 — Stepik «Java: полный курс» (Андрей Сумин)</li>
+            <li>Апр 2026 — Stepik «Kotlin: полный курс (2025)» (Андрей Сумин)</li>
+            <li>Май 2026 — Stepik «Современная Android-разработка (2025)» (Андрей Сумин)</li>
+            <li>Июл–Авг 2026 — Летняя школа X5 Tech «Мобильная разработка на KMP»</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="achievements">
+      <p class="section-label reveal">04 — Достижения</p>
+      <h2 class="section-title reveal reveal-delay-1">Награды и призовые места</h2>
+      <div class="achievements">
+        <div class="achievement reveal reveal-delay-1">
+          <span class="achievement-icon">🏆</span>
+          <p class="achievement-text">Призёр I Всероссийского IT-марафона «Цифровые инструменты для бизнеса – 2025»</p>
+        </div>
+        <div class="achievement reveal reveal-delay-2">
+          <span class="achievement-icon">📱</span>
+          <p class="achievement-text">Призёр Регионального этапа «Профессионалы» в компетенции мобильной разработки</p>
+        </div>
+        <div class="achievement reveal reveal-delay-3">
+          <span class="achievement-icon">🌍</span>
+          <p class="achievement-text">Призёр Регионального этапа WorldSkills Junior</p>
+        </div>
+        <div class="achievement reveal reveal-delay-4">
+          <span class="achievement-icon">⭐</span>
+          <p class="achievement-text">Призёр Samsung Android BootCamp 2026</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="why">
+      <p class="section-label reveal">05 — Мотивация</p>
+      <h2 class="section-title reveal reveal-delay-1">Почему X5 Tech</h2>
+      <div class="why-block reveal reveal-delay-2">
+        <p class="why-text">
+          Меня привлекла компания своими сотрудниками. На буткемпе по Android-разработке и в летней
+          школе X5 Tech я увидел, как горят своим делом люди из X5: они понятно объясняют, вовлечены
+          в процесс и создают сильную команду. Хочу работать с такими коллегами. X5 Tech — крупная
+          IT-компания с масштабными проектами и большими возможностями для роста. Я горю желанием
+          получить опыт в мобильной разработке, продолжаю изучать Kotlin и люблю разбираться, как
+          всё работает «под капотом». Буду рад попасть на стажировку Android-разработчика и приносить
+          пользу команде.
+        </p>
+      </div>
+    </section>
+
+    <section id="contact">
+      <p class="section-label reveal">06 — Контакты</p>
+      <h2 class="section-title reveal reveal-delay-1">Давайте созвонимся</h2>
+      <div class="contact-layout">
+        <div class="contact-grid">
+          <a href="mailto:olegbryanskiy32@mail.ru" class="contact-card reveal reveal-delay-1 magnetic">
+            <span class="contact-label">Email</span>
+            <span class="contact-value">olegbryanskiy32@mail.ru</span>
+          </a>
+          <a href="tel:+79532903825" class="contact-card reveal reveal-delay-1 magnetic">
+            <span class="contact-label">Телефон</span>
+            <span class="contact-value">+7 953 290-38-25</span>
+          </a>
+          <a href="https://t.me/ilove_dev" target="_blank" rel="noopener" class="contact-card reveal reveal-delay-2 magnetic">
+            <span class="contact-label">Telegram</span>
+            <span class="contact-value">@ilove_dev</span>
+          </a>
+          <a href="https://github.com/gpsplpd" target="_blank" rel="noopener" class="contact-card reveal reveal-delay-2 magnetic">
+            <span class="contact-label">GitHub</span>
+            <span class="contact-value">gpsplpd</span>
+          </a>
+        </div>
+        <a href="https://t.me/ilove_dev" target="_blank" rel="noopener" class="qr-card reveal reveal-delay-2 magnetic" aria-label="QR-код Telegram @ilove_dev">
+          <div class="qr-frame">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASgAAAEoAQMAAADRyf5aAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABhElEQVRoge3aTW6DMBAF4LFYsOQIHIWjwdE4Ckdg2UXE1J4fcFolyiqMpTebNu7H6tWDxwrRRzWz10Y0PXy5ZxrOvxxQd6pdlxNviflBE/PSM/9QVvbECNWEkqiTpM0F5qgXSVsCP6AaU5q2qFxQraq8QTteu/Lx7f8E1LfV1VczWf248rr7QkVU7GWqK1Evr09DUCHVvzrV24IKpuYzai3rvkSc2/KerC1D3ae07LenydAKqglV0s6vyNEn/Mknw7Jq8+IBFV/tHuuo21YCz88SKXw6DUGFVXYylVAnmQxn7b6lDnkW6la1n3HJejmJkvXV6i0K1YiqXpYkdzB8jv5V2lDB1SgXMuSTYXk/6q4l775Q4dUZan3jZmoUCHWfqsrv0nQ/lpWBq10KFVnN7LUli5qvu+3qNAQVW1132/LThvz+T9pQ8ZVFbWn7ZChVzx1QAVQhnXx5Qlvr4BaqKbWSRb3YnWiyow5UA8r7qipJe2avjaCaUNdn37XVZKgFFV99VL+cgweulij2RAAAAABJRU5ErkJggg==" alt="QR Telegram @ilove_dev" width="148" height="148">
+          </div>
+          <div class="qr-meta">
+            <div class="contact-label">Сканируй Telegram</div>
+            <div class="contact-value">@ilove_dev</div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      <p>© 2026 <span>Олег Лощенок</span> · Android Developer · Москва</p>
+    </footer>
+
+  </div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const isTouch = matchMedia('(hover: none), (pointer: coarse)').matches;
+      const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      /* ── Custom Cursor ── */
+      const dot = document.getElementById('cursorDot');
+      const ring = document.getElementById('cursorRing');
+      let mx = 0, my = 0, rx = 0, ry = 0;
+
+      if (!isTouch && dot && ring) {
+        document.addEventListener('mousemove', e => {
+          mx = e.clientX;
+          my = e.clientY;
+          dot.style.left = mx + 'px';
+          dot.style.top = my + 'px';
+        });
+
+        function animateRing() {
+          rx += (mx - rx) * 0.15;
+          ry += (my - ry) * 0.15;
+          ring.style.left = rx + 'px';
+          ring.style.top = ry + 'px';
+          requestAnimationFrame(animateRing);
+        }
+        animateRing();
+
+        document.querySelectorAll('a, button, .btn, .skill-tag, .achievement, .contact-card, .qr-card').forEach(el => {
+          el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
+          el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
+        });
+      }
+
+      /* ── Magnetic buttons ── */
+      if (!isTouch) {
+        document.querySelectorAll('.magnetic').forEach(el => {
+          el.addEventListener('mousemove', e => {
+            const rect = el.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            el.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+          });
+          el.addEventListener('mouseleave', () => {
+            el.style.transform = '';
+          });
+        });
+      }
+
+      /* ── Scroll Reveal ── */
+      const revealEls = document.querySelectorAll('.reveal');
+      const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+      revealEls.forEach(el => revealObserver.observe(el));
+
+      /* ── Parallax ── */
+      const parallaxEls = document.querySelectorAll('[data-parallax]');
+      let scrollY = 0;
+      let ticking = false;
+
+      function updateParallax() {
+        if (prefersReduced) return;
+        parallaxEls.forEach(el => {
+          const speed = parseFloat(el.dataset.parallax) || 0;
+          const rect = el.getBoundingClientRect();
+          const offset = (rect.top + rect.height / 2 - innerHeight / 2) * speed;
+          el.style.transform = `translate3d(0, ${offset}px, 0)`;
+        });
+        ticking = false;
+      }
+
+      /* ── Active nav link ── */
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('nav a');
+
+      function updateNav() {
+        let current = '';
+        sections.forEach(section => {
+          const top = section.offsetTop - 120;
+          if (scrollY >= top) current = section.id;
+        });
+        navLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+        });
+      }
+
+      window.addEventListener('scroll', () => {
+        scrollY = window.scrollY;
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            updateParallax();
+            updateNav();
+            ticking = false;
+          });
+          ticking = true;
+        }
+      }, { passive: true });
+
+      updateParallax();
+      updateNav();
+
+      /* ── Smooth scroll offset for fixed nav ── */
+      navLinks.forEach(link => {
+        link.addEventListener('click', e => {
+          e.preventDefault();
+          const target = document.querySelector(link.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+
+      /* ── Tilt on glass cards ── */
+      if (!isTouch && !prefersReduced) {
+        document.querySelectorAll('.glass, .achievement').forEach(card => {
+          card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = (e.clientX - rect.left) / rect.width - 0.5;
+            const y = (e.clientY - rect.top) / rect.height - 0.5;
+            card.style.transform = `perspective(800px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) translateY(-6px)`;
+          });
+          card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+          });
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
