@@ -3,10 +3,30 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
   <title>Олег Лощенок — Android Developer</title>
+  <meta name="description" content="Android-разработчик: Kotlin, Jetpack Compose, KMP. Призёр Samsung Android BootCamp 2026, WorldSkills, «Профессионалы». Открыт к стажировке в Москве.">
+  <meta name="theme-color" content="#06080f">
+  <meta name="color-scheme" content="dark">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Олег Лощенок — Android Developer">
+  <meta property="og:description" content="Kotlin · Jetpack Compose · KMP. Открыт к стажировке.">
+  <meta property="og:locale" content="ru_RU">
+  <meta property="og:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='630' viewBox='0 0 1200 630'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2306080f'/%3E%3Cstop offset='100%25' stop-color='%230d1a2d'/%3E%3C/linearGradient%3E%3ClinearGradient id='t' x1='0%25' y1='0%25' x2='100%25' y2='0%25'%3E%3Cstop offset='0%25' stop-color='%233ddc84'/%3E%3Cstop offset='50%25' stop-color='%2300e5ff'/%3E%3Cstop offset='100%25' stop-color='%23a855f7'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1200' height='630' fill='url(%23g)'/%3E%3Ctext x='80' y='290' fill='url(%23t)' font-family='Arial,sans-serif' font-weight='800' font-size='68'%3E%D0%9E%D0%BB%D0%B5%D0%B3 %D0%9B%D0%BE%D1%89%D0%B5%D0%BD%D0%BE%D0%BA%3C/text%3E%3Ctext x='80' y='370' fill='%23e8ecf4' font-family='monospace' font-size='30'%3EAndroid Developer%3C/text%3E%3Ctext x='80' y='430' fill='%238b95a8' font-family='monospace' font-size='26'%3EKotlin %C2%B7 Jetpack Compose %C2%B7 KMP%3C/text%3E%3Ctext x='80' y='490' fill='%233ddc84' font-family='monospace' font-size='22'%3E%D0%9E%D1%82%D0%BA%D1%80%D1%8B%D1%82 %D0%BA %D1%81%D1%82%D0%B0%D0%B6%D0%B8%D1%80%D0%BE%D0%B2%D0%BA%D0%B5%3C/text%3E%3C/svg%3E">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%2306080f'/%3E%3Cpath d='M8 22V10l8-4 8 4v12l-8 4-8-4z' stroke='%233ddc84' stroke-width='1.8' fill='none' stroke-linejoin='round'/%3E%3Cpath d='M12 16h8M12 19h5' stroke='%2300e5ff' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E" type="image/svg+xml">
+  <noscript>
+    <style>
+      .reveal, .hero-badge, .hero-sub, .hero-actions, .skills-strip, .hero-scroll, nav {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+      }
+      .hero h1 .word { opacity: 1 !important; transform: none !important; animation: none !important; }
+      *, *::before, *::after { cursor: auto !important; }
+      .cursor-dot, .cursor-ring { display: none !important; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    </style>
+  </noscript>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Unbounded:wght@400;600;800&display=swap" rel="stylesheet">
@@ -27,6 +47,7 @@
       --font-mono: 'JetBrains Mono', monospace;
       --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
       --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --nav-offset: 110px;
     }
 
     html {
@@ -40,13 +61,63 @@
       background: var(--bg);
       color: var(--text);
       overflow-x: hidden;
-      cursor: none;
       line-height: 1.65;
     }
+
+    body.has-custom-cursor,
+    body.has-custom-cursor a,
+    body.has-custom-cursor button,
+    body.has-custom-cursor [role="button"],
+    body.has-custom-cursor input,
+    body.has-custom-cursor select,
+    body.has-custom-cursor textarea,
+    body.has-custom-cursor .btn { cursor: none; }
 
     ::selection {
       background: var(--accent);
       color: var(--bg);
+    }
+
+    /* ── Skip link ── */
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: 16px;
+      z-index: 100001;
+      padding: 12px 20px;
+      background: var(--accent);
+      color: var(--bg);
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: top 0.3s var(--ease-out);
+    }
+
+    .skip-link:focus-visible {
+      top: 16px;
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    /* ── Focus visible ── */
+    :focus { outline: none; }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    a:focus-visible,
+    .btn:focus-visible,
+    .contact-card:focus-visible,
+    .qr-card:focus-visible {
+      outline-color: var(--accent);
+    }
+
+    nav a:focus-visible {
+      outline-offset: 2px;
+      background: rgba(61, 220, 132, 0.15);
     }
 
     /* ── Custom Cursor ── */
@@ -57,8 +128,11 @@
       z-index: 99999;
       border-radius: 50%;
       transform: translate(-50%, -50%);
-      will-change: transform;
+      opacity: 0;
     }
+
+    body.has-custom-cursor .cursor-dot,
+    body.has-custom-cursor .cursor-ring { opacity: 1; }
 
     .cursor-dot {
       width: 6px; height: 6px;
@@ -73,11 +147,21 @@
                   border-color 0.3s, opacity 0.3s;
     }
 
-    body.cursor-hover .cursor-dot { width: 12px; height: 12px; background: var(--accent2); }
-    body.cursor-hover .cursor-ring { width: 60px; height: 60px; border-color: rgba(0, 229, 255, 0.6); }
+    body.has-custom-cursor.cursor-hover .cursor-dot { width: 12px; height: 12px; background: var(--accent2); }
+    body.has-custom-cursor.cursor-hover .cursor-ring { width: 60px; height: 60px; border-color: rgba(0, 229, 255, 0.6); }
+
+    body.has-custom-cursor.cursor-focus .cursor-dot { width: 10px; height: 10px; background: var(--accent3); }
+    body.has-custom-cursor.cursor-focus .cursor-ring { width: 52px; height: 52px; border-color: rgba(168, 85, 247, 0.6); }
 
     @media (hover: none), (pointer: coarse) {
-      body { cursor: auto; }
+      body.has-custom-cursor,
+      body.has-custom-cursor a,
+      body.has-custom-cursor button,
+      body.has-custom-cursor [role="button"],
+      body.has-custom-cursor input,
+      body.has-custom-cursor select,
+      body.has-custom-cursor textarea,
+      body.has-custom-cursor .btn { cursor: auto !important; }
       .cursor-dot, .cursor-ring { display: none; }
     }
 
@@ -88,6 +172,7 @@
       z-index: 0;
       overflow: hidden;
       pointer-events: none;
+      transition: transform 0.15s ease-out;
     }
 
     .orb {
@@ -95,7 +180,6 @@
       border-radius: 50%;
       filter: blur(80px);
       opacity: 0.45;
-      will-change: transform;
     }
 
     .orb-1 {
@@ -144,6 +228,7 @@
         linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
       background-size: 60px 60px;
+        -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 20%, transparent 80%);
       mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, black 20%, transparent 80%);
     }
 
@@ -165,6 +250,20 @@
       padding: 0 24px;
     }
 
+    section[id] { scroll-margin-top: 110px; }
+
+    [data-parallax] { translate: 0 var(--parallax-y, 0px); }
+
+    .orb {
+      translate: var(--mouse-x, 0px) calc(var(--parallax-y, 0px) + var(--mouse-y, 0px));
+    }
+
+    .section-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin-bottom: 80px;
+    }
+
     /* ── Nav ── */
     nav {
       position: fixed;
@@ -182,7 +281,16 @@
       border-radius: 100px;
       opacity: 0;
       animation: navIn 1s var(--ease-out) 0.5s forwards;
+      max-width: calc(100vw - 32px);
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x proximity;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      flex-wrap: nowrap;
     }
+
+    nav::-webkit-scrollbar { display: none; }
 
     @keyframes navIn {
       from { opacity: 0; transform: translateX(-50%) translateY(-20px); }
@@ -197,9 +305,16 @@
       border-radius: 100px;
       transition: color 0.3s, background 0.3s;
       letter-spacing: 0.02em;
+      white-space: nowrap;
+      flex-shrink: 0;
     }
 
     nav a:hover, nav a.active {
+      color: var(--text);
+      background: rgba(61, 220, 132, 0.12);
+    }
+
+    nav a[aria-current="true"] {
       color: var(--text);
       background: rgba(61, 220, 132, 0.12);
     }
@@ -289,6 +404,8 @@
       color: var(--muted);
       max-width: 560px;
       margin-bottom: 40px;
+      padding-left: 12px;
+      border-left: 2px solid var(--accent);
       opacity: 0;
       animation: fadeUp 0.8s var(--ease-out) 0.7s forwards;
     }
@@ -320,11 +437,33 @@
       font-weight: 600;
       text-decoration: none;
       border: none;
-      cursor: none;
       transition: transform 0.3s var(--ease-spring), box-shadow 0.3s;
       position: relative;
       overflow: hidden;
     }
+
+    body.has-custom-cursor .btn { cursor: none; }
+
+    .btn svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.25) 50%, transparent 60%);
+      transform: translateX(-120%);
+      transition: transform 0.6s var(--ease-out);
+      pointer-events: none;
+    }
+
+    .btn:hover::after { transform: translateX(120%); }
+
+    .magnetic { display: inline-flex; }
+    .magnetic-inner { display: inline-flex; align-items: center; gap: 10px; transition: transform 0.3s var(--ease-spring); }
 
     .btn-primary {
       background: linear-gradient(135deg, var(--accent), #2bb86a);
@@ -411,15 +550,38 @@
 
     /* ── Sections ── */
     section {
-      padding: 80px 0;
+      padding: 80px 0 0;
+    }
+
+    section > .section-label:first-child {
+      margin-top: 0;
     }
 
     .section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
       font-size: 0.7rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--accent);
       margin-bottom: 12px;
+    }
+
+    .section-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 28px;
+      height: 28px;
+      padding: 0 8px;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      background: rgba(61, 220, 132, 0.1);
+      border: 1px solid rgba(61, 220, 132, 0.25);
+      border-radius: 8px;
     }
 
     .section-title {
@@ -454,9 +616,15 @@
       padding: 32px;
       backdrop-filter: blur(16px) saturate(1.3);
       -webkit-backdrop-filter: blur(16px) saturate(1.3);
-      transition: transform 0.4s var(--ease-out), border-color 0.4s, box-shadow 0.4s;
+      transition: border-color 0.4s, box-shadow 0.4s;
       position: relative;
       overflow: hidden;
+      transform-style: preserve-3d;
+    }
+
+    .tilt-inner {
+      transition: transform 0.4s var(--ease-out);
+      transform-style: preserve-3d;
     }
 
     .glass::before {
@@ -466,10 +634,10 @@
       background: linear-gradient(135deg, rgba(61,220,132,0.06) 0%, transparent 50%);
       opacity: 0;
       transition: opacity 0.4s;
+      pointer-events: none;
     }
 
     .glass:hover {
-      transform: translateY(-6px);
       border-color: rgba(61, 220, 132, 0.2);
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(61, 220, 132, 0.06);
     }
@@ -480,6 +648,24 @@
       font-size: 0.95rem;
       color: var(--muted);
       line-height: 1.8;
+    }
+
+    /* ── Stack tags ── */
+    .stack-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .stack-tag {
+      padding: 5px 12px;
+      font-size: 0.68rem;
+      color: var(--accent2);
+      background: rgba(0, 229, 255, 0.08);
+      border: 1px solid rgba(0, 229, 255, 0.2);
+      border-radius: 8px;
+      letter-spacing: 0.02em;
     }
 
     /* ── Timeline ── */
@@ -499,9 +685,44 @@
       border-radius: 2px;
     }
 
+    .timeline-now {
+      position: absolute;
+      left: -6px;
+      bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 2;
+    }
+
+    .timeline-now-dot {
+      width: 14px;
+      height: 14px;
+      background: var(--accent);
+      border: 3px solid var(--bg);
+      border-radius: 50%;
+      box-shadow: 0 0 12px var(--glow);
+      animation: nowPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes nowPulse {
+      0%, 100% { box-shadow: 0 0 8px var(--glow); }
+      50% { box-shadow: 0 0 20px var(--glow), 0 0 40px rgba(61,220,132,0.2); }
+    }
+
+    .timeline-now-label {
+      font-size: 0.62rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      white-space: nowrap;
+      opacity: 0.9;
+    }
+
     .timeline-item {
       position: relative;
       margin-bottom: 40px;
+      padding-top: 28px;
     }
 
     .timeline-item:last-child { margin-bottom: 0; }
@@ -510,7 +731,7 @@
       content: '';
       position: absolute;
       left: -36px;
-      top: 8px;
+      top: 36px;
       width: 10px;
       height: 10px;
       background: var(--bg);
@@ -582,6 +803,12 @@
       gap: 16px;
     }
 
+    @media (min-width: 768px) {
+      .achievements {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
     .achievement {
       padding: 28px 24px;
       background: var(--surface);
@@ -644,6 +871,18 @@
 
     .achievement:hover .achievement-badge {
       transform: translateY(-4px) scale(1.06);
+    }
+
+    .achievement-text {
+      font-size: 0.82rem;
+      color: var(--muted);
+      line-height: 1.55;
+      transition: transform 0.45s var(--ease-out), color 0.45s;
+    }
+
+    .achievement:hover .achievement-text {
+      transform: translateX(2px);
+      color: var(--text);
     }
 
     .achievement[data-brand="it"] .achievement-badge {
@@ -712,12 +951,6 @@
     .achievement[data-brand="ws"] .achievement-tag { color: #818cf8; }
     .achievement[data-brand="samsung"] .achievement-tag { color: var(--accent); }
 
-    .achievement-text {
-      font-size: 0.82rem;
-      color: var(--muted);
-      line-height: 1.55;
-    }
-
     /* ── Why X5 ── */
     .why-block {
       background: linear-gradient(135deg, rgba(61,220,132,0.08) 0%, rgba(0,229,255,0.05) 50%, rgba(168,85,247,0.06) 100%);
@@ -736,7 +969,7 @@
       font-family: var(--font-display);
       font-size: 12rem;
       font-weight: 800;
-      color: rgba(255,255,255,0.02);
+      color: rgba(255,255,255,0.015);
       pointer-events: none;
       line-height: 1;
     }
@@ -779,6 +1012,12 @@
       backdrop-filter: blur(12px);
     }
 
+    .contact-card .magnetic-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
     .contact-card:hover {
       transform: translateY(-6px);
       border-color: rgba(0, 229, 255, 0.3);
@@ -818,6 +1057,13 @@
       overflow: hidden;
     }
 
+    .qr-card .magnetic-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
     .qr-card::before {
       content: '';
       position: absolute;
@@ -844,7 +1090,6 @@
       box-shadow: 0 0 0 1px rgba(255,255,255,0.08), 0 8px 32px rgba(0, 229, 255, 0.15);
     }
 
-    .qr-frame canvas,
     .qr-frame img {
       display: block;
       width: 148px;
@@ -856,9 +1101,19 @@
       position: relative;
       z-index: 1;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
     }
 
-    .qr-meta .contact-label { margin-bottom: 4px; }
+    .qr-telegram-icon {
+      width: 22px;
+      height: 22px;
+      color: var(--accent2);
+    }
+
+    .qr-meta .contact-label { margin-bottom: 0; }
     .qr-meta .contact-value { color: var(--accent2); font-size: 0.82rem; }
 
     footer {
@@ -870,28 +1125,62 @@
 
     footer span { color: var(--accent); }
 
-    /* ── Parallax layers ── */
-    [data-parallax] {
-      will-change: transform;
+    footer a {
+      color: var(--accent2);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s;
+    }
+
+    footer a:hover { border-bottom-color: var(--accent2); }
+
+    footer .footer-made {
+      margin-top: 8px;
+      font-size: 0.7rem;
+      opacity: 0.75;
     }
 
     /* ── Responsive ── */
     @media (max-width: 768px) {
-      nav { display: none; }
+      nav {
+        top: 12px;
+        padding: 6px 10px;
+        gap: 4px;
+        background: rgba(10, 14, 24, 0.82);
+        scroll-snap-type: x proximity;
+        backdrop-filter: blur(12px) saturate(1.1);
+        -webkit-backdrop-filter: blur(12px) saturate(1.1);
+      }
+
+      nav a {
+        font-size: 0.68rem;
+        padding: 7px 12px;
+      }
+
       .hero { padding-top: 80px; }
+
+      .orb { filter: blur(60px); opacity: 0.28; }
+      .orb-3 { display: none; }
+
+      .grid-overlay {
+        opacity: 0.4;
+        background-size: 80px 80px;
+      }
+
+      .noise { opacity: 0.02; }
+
       .why-block { padding: 28px; }
       .why-block::after { font-size: 6rem; }
       .glass { padding: 24px; }
-      .contact-layout {
-        grid-template-columns: 1fr;
-      }
-      .contact-grid {
-        grid-template-columns: 1fr 1fr;
-      }
+
+      .contact-layout { grid-template-columns: 1fr; }
+      .contact-grid { grid-template-columns: 1fr 1fr; }
+
       .qr-card {
         min-width: 0;
         width: 100%;
       }
+
       .contact-value {
         font-size: 0.78rem;
         word-break: break-all;
@@ -906,14 +1195,25 @@
       }
       .reveal { opacity: 1; transform: none; }
     }
+
+    @media (max-width: 768px), (prefers-reduced-motion: reduce) {
+      .orb { animation: none; filter: blur(60px); opacity: 0.3; }
+      .noise, .grid-overlay { display: none; }
+      .glass, nav, .qr-card {
+        backdrop-filter: blur(10px) saturate(1.2);
+        -webkit-backdrop-filter: blur(10px) saturate(1.2);
+      }
+    }
   </style>
 </head>
 <body>
 
-  <div class="cursor-dot" id="cursorDot"></div>
-  <div class="cursor-ring" id="cursorRing"></div>
+  <a href="#about" class="skip-link">К содержимому</a>
 
-  <div class="bg-canvas" aria-hidden="true">
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+
+  <div class="bg-canvas" id="bgCanvas" aria-hidden="true">
     <div class="orb orb-1" data-parallax="0.03"></div>
     <div class="orb orb-2" data-parallax="-0.02"></div>
     <div class="orb orb-3" data-parallax="0.015"></div>
@@ -921,11 +1221,12 @@
   <div class="grid-overlay" aria-hidden="true"></div>
   <div class="noise" aria-hidden="true"></div>
 
-  <nav>
+  <nav aria-label="Основная навигация">
     <a href="#about">О себе</a>
     <a href="#experience">Опыт</a>
     <a href="#education">Образование</a>
     <a href="#achievements">Достижения</a>
+    <a href="#why">Мотивация</a>
     <a href="#contact">Контакты</a>
   </nav>
 
@@ -945,8 +1246,18 @@
       <p class="hero-sub">Android-разработчик · Kotlin · Jetpack Compose · KMP</p>
 
       <div class="hero-actions">
-        <a href="#contact" class="btn btn-primary magnetic">Связаться</a>
-        <a href="https://github.com/gpsplpd/Android-Bootcamp-2026-Frontend" target="_blank" rel="noopener" class="btn btn-ghost magnetic">GitHub проект</a>
+        <a href="#contact" class="btn btn-primary magnetic">
+          <span class="magnetic-inner">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16v12H4V6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Связаться
+          </span>
+        </a>
+        <a href="https://github.com/gpsplpd/Android-Bootcamp-2026-Frontend" target="_blank" rel="noopener" class="btn btn-ghost magnetic">
+          <span class="magnetic-inner">
+            <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 19c-4 1.5-4-2.5-5-3m10 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            GitHub проект
+          </span>
+        </a>
       </div>
 
       <div class="skills-strip">
@@ -966,66 +1277,94 @@
       </div>
     </header>
 
-    <section id="about">
-      <p class="section-label reveal">01 — О себе</p>
-      <h2 class="section-title reveal reveal-delay-1">Кто я</h2>
+    <div class="section-divider" aria-hidden="true"></div>
+
+    <section id="about" aria-labelledby="about-title">
+      <p class="section-label reveal"><span class="section-num">01</span> О себе</p>
+      <h2 class="section-title reveal reveal-delay-1" id="about-title">Кто я</h2>
       <div class="glass reveal reveal-delay-2">
-        <p class="about-text">
-          Начинающий Android-разработчик. Изучаю Kotlin, Jetpack Compose и Kotlin Multiplatform.
-          Участвовал в летней школе X5 Tech по мобильной разработке на KMP. Прошёл курсы по Java,
-          Kotlin и Android на Stepik. Участвую в хакатонах и чемпионатах («Профессионалы», WorldSkills,
-          Samsung Android BootCamp 2026). Быстро учусь, готов вкладываться в реальные задачи
-          и работать в команде.
-        </p>
+        <div class="tilt-inner">
+          <p class="about-text">
+            Начинающий Android-разработчик. Изучаю Kotlin, Jetpack Compose и Kotlin Multiplatform.
+            Участвовал в летней школе X5 Tech по мобильной разработке на KMP. Прошёл курсы по Java,
+            Kotlin и Android на Stepik. Участвую в хакатонах и чемпионатах («Профессионалы», WorldSkills,
+            Samsung Android BootCamp 2026). Быстро учусь, готов вкладываться в реальные задачи
+            и работать в команде.
+          </p>
+        </div>
       </div>
     </section>
 
-    <section id="experience">
-      <p class="section-label reveal">02 — Опыт</p>
-      <h2 class="section-title reveal reveal-delay-1">Учебные проекты</h2>
+    <div class="section-divider" aria-hidden="true"></div>
+
+    <section id="experience" aria-labelledby="experience-title">
+      <p class="section-label reveal"><span class="section-num">02</span> Опыт</p>
+      <h2 class="section-title reveal reveal-delay-1" id="experience-title">Учебные проекты</h2>
       <div class="timeline">
         <div class="glass timeline-item reveal reveal-delay-2">
-          <p class="timeline-date">2026 · Samsung Android BootCamp</p>
-          <h3 class="timeline-title">Клиентская часть приложения для планирования встреч</h3>
-          <ul class="timeline-list">
-            <li>Разработка на Kotlin + Jetpack Compose</li>
-            <li>Основы Ktor, Coroutines, архитектура Clean + MVVM</li>
-            <li>Работа с Git в команде</li>
-          </ul>
-          <p style="margin-top: 16px; font-size: 0.82rem;">
-            <a href="https://github.com/gpsplpd/Android-Bootcamp-2026-Frontend" target="_blank" rel="noopener" class="link">github.com/gpsplpd/Android-Bootcamp-2026-Frontend</a>
-          </p>
+          <div class="tilt-inner">
+            <p class="timeline-date">2026 · Samsung Android BootCamp</p>
+            <h3 class="timeline-title">Клиентская часть приложения для планирования встреч</h3>
+            <ul class="timeline-list">
+              <li>Разработка на Kotlin + Jetpack Compose</li>
+              <li>Основы Ktor, Coroutines, архитектура Clean + MVVM</li>
+              <li>Работа с Git в команде</li>
+            </ul>
+            <div class="stack-tags">
+              <span class="stack-tag">Kotlin</span>
+              <span class="stack-tag">Compose</span>
+              <span class="stack-tag">Ktor</span>
+              <span class="stack-tag">Coroutines</span>
+              <span class="stack-tag">Clean</span>
+              <span class="stack-tag">MVVM</span>
+            </div>
+            <p style="margin-top: 16px; font-size: 0.82rem;">
+              <a href="https://github.com/gpsplpd/Android-Bootcamp-2026-Frontend" target="_blank" rel="noopener" class="link">github.com/gpsplpd/Android-Bootcamp-2026-Frontend</a>
+            </p>
+          </div>
+        </div>
+        <div class="timeline-now" aria-hidden="true">
+          <span class="timeline-now-dot"></span>
+          <span class="timeline-now-label">now</span>
         </div>
       </div>
     </section>
 
-    <section id="education">
-      <p class="section-label reveal">03 — Образование</p>
-      <h2 class="section-title reveal reveal-delay-1">Учёба и курсы</h2>
+    <div class="section-divider" aria-hidden="true"></div>
+
+    <section id="education" aria-labelledby="education-title">
+      <p class="section-label reveal"><span class="section-num">03</span> Образование</p>
+      <h2 class="section-title reveal reveal-delay-1" id="education-title">Учёба и курсы</h2>
       <div class="grid-2">
         <div class="glass reveal reveal-delay-2">
-          <p class="timeline-date">Сентябрь 2025 — Июль 2029</p>
-          <h3 class="timeline-title">РТУ МИРЭА, Москва</h3>
-          <p class="about-text">
-            Бакалавриат, очная форма — специальность 09.03.02 «Информационные системы и технологии».
-            Направление: «Разработка кроссплатформенных бизнес-приложений».
-          </p>
+          <div class="tilt-inner">
+            <p class="timeline-date">Сентябрь 2025 — Июль 2029</p>
+            <h3 class="timeline-title">РТУ МИРЭА, Москва</h3>
+            <p class="about-text">
+              Бакалавриат, очная форма — специальность 09.03.02 «Информационные системы и технологии».
+              Направление: «Разработка кроссплатформенных бизнес-приложений».
+            </p>
+          </div>
         </div>
         <div class="glass reveal reveal-delay-3">
-          <h3 class="timeline-title" style="margin-bottom: 16px;">Дополнительные курсы</h3>
-          <ul class="timeline-list">
-            <li>Фев 2026 — Stepik «Java: полный курс» (Андрей Сумин)</li>
-            <li>Апр 2026 — Stepik «Kotlin: полный курс (2025)» (Андрей Сумин)</li>
-            <li>Май 2026 — Stepik «Современная Android-разработка (2025)» (Андрей Сумин)</li>
-            <li>Июл–Авг 2026 — Летняя школа X5 Tech «Мобильная разработка на KMP»</li>
-          </ul>
+          <div class="tilt-inner">
+            <h3 class="timeline-title" style="margin-bottom: 16px;">Дополнительные курсы</h3>
+            <ul class="timeline-list">
+              <li>Фев 2026 — Stepik «Java: полный курс» (Андрей Сумин)</li>
+              <li>Апр 2026 — Stepik «Kotlin: полный курс (2025)» (Андрей Сумин)</li>
+              <li>Май 2026 — Stepik «Современная Android-разработка (2025)» (Андрей Сумин)</li>
+              <li>Июл–Авг 2026 — Летняя школа X5 Tech «Мобильная разработка на KMP»</li>
+            </ul>
+          </div>
         </div>
       </div>
     </section>
 
-    <section id="achievements">
-      <p class="section-label reveal">04 — Достижения</p>
-      <h2 class="section-title reveal reveal-delay-1">Награды и призовые места</h2>
+    <div class="section-divider" aria-hidden="true"></div>
+
+    <section id="achievements" aria-labelledby="achievements-title">
+      <p class="section-label reveal"><span class="section-num">04</span> Достижения</p>
+      <h2 class="section-title reveal reveal-delay-1" id="achievements-title">Награды и призовые места</h2>
       <div class="achievements">
         <div class="achievement reveal reveal-delay-1" data-brand="it">
           <div class="achievement-badge" aria-hidden="true">
@@ -1076,9 +1415,11 @@
       </div>
     </section>
 
-    <section id="why">
-      <p class="section-label reveal">05 — Мотивация</p>
-      <h2 class="section-title reveal reveal-delay-1">Почему X5 Tech</h2>
+    <div class="section-divider" aria-hidden="true"></div>
+
+    <section id="why" aria-labelledby="why-title">
+      <p class="section-label reveal"><span class="section-num">05</span> Мотивация</p>
+      <h2 class="section-title reveal reveal-delay-1" id="why-title">Почему X5 Tech</h2>
       <div class="why-block reveal reveal-delay-2">
         <p class="why-text">
           Меня привлекла компания своими сотрудниками. На буткемпе по Android-разработке и в летней
@@ -1092,42 +1433,56 @@
       </div>
     </section>
 
-    <section id="contact">
-      <p class="section-label reveal">06 — Контакты</p>
-      <h2 class="section-title reveal reveal-delay-1">Давайте созвонимся</h2>
+    <div class="section-divider" aria-hidden="true"></div>
+
+    <section id="contact" aria-labelledby="contact-title">
+      <p class="section-label reveal"><span class="section-num">06</span> Контакты</p>
+      <h2 class="section-title reveal reveal-delay-1" id="contact-title">Давайте созвонимся</h2>
       <div class="contact-layout">
         <div class="contact-grid">
           <a href="mailto:olegbryanskiy32@mail.ru" class="contact-card reveal reveal-delay-1 magnetic">
-            <span class="contact-label">Email</span>
-            <span class="contact-value">olegbryanskiy32@mail.ru</span>
+            <span class="magnetic-inner">
+              <span class="contact-label">Email</span>
+              <span class="contact-value">olegbryanskiy32@mail.ru</span>
+            </span>
           </a>
           <a href="tel:+79532903825" class="contact-card reveal reveal-delay-1 magnetic">
-            <span class="contact-label">Телефон</span>
-            <span class="contact-value">+7 953 290-38-25</span>
+            <span class="magnetic-inner">
+              <span class="contact-label">Телефон</span>
+              <span class="contact-value">+7 953 290-38-25</span>
+            </span>
           </a>
           <a href="https://t.me/ilove_dev" target="_blank" rel="noopener" class="contact-card reveal reveal-delay-2 magnetic">
-            <span class="contact-label">Telegram</span>
-            <span class="contact-value">@ilove_dev</span>
+            <span class="magnetic-inner">
+              <span class="contact-label">Telegram</span>
+              <span class="contact-value">@ilove_dev</span>
+            </span>
           </a>
           <a href="https://github.com/gpsplpd" target="_blank" rel="noopener" class="contact-card reveal reveal-delay-2 magnetic">
-            <span class="contact-label">GitHub</span>
-            <span class="contact-value">gpsplpd</span>
+            <span class="magnetic-inner">
+              <span class="contact-label">GitHub</span>
+              <span class="contact-value">gpsplpd</span>
+            </span>
           </a>
         </div>
         <a href="https://t.me/ilove_dev" target="_blank" rel="noopener" class="qr-card reveal reveal-delay-2 magnetic" aria-label="QR-код Telegram @ilove_dev">
-          <div class="qr-frame">
-            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASgAAAEoAQMAAADRyf5aAAAABlBMVEX///8AAABVwtN+AAAACXBIWXMAAA7EAAAOxAGVKw4bAAABhElEQVRoge3aTW6DMBAF4LFYsOQIHIWjwdE4Ckdg2UXE1J4fcFolyiqMpTebNu7H6tWDxwrRRzWz10Y0PXy5ZxrOvxxQd6pdlxNviflBE/PSM/9QVvbECNWEkqiTpM0F5qgXSVsCP6AaU5q2qFxQraq8QTteu/Lx7f8E1LfV1VczWf248rr7QkVU7GWqK1Evr09DUCHVvzrV24IKpuYzai3rvkSc2/KerC1D3ae07LenydAKqglV0s6vyNEn/Mknw7Jq8+IBFV/tHuuo21YCz88SKXw6DUGFVXYylVAnmQxn7b6lDnkW6la1n3HJejmJkvXV6i0K1YiqXpYkdzB8jv5V2lDB1SgXMuSTYXk/6q4l775Q4dUZan3jZmoUCHWfqsrv0nQ/lpWBq10KFVnN7LUli5qvu+3qNAQVW1132/LThvz+T9pQ8ZVFbWn7ZChVzx1QAVQhnXx5Qlvr4BaqKbWSRb3YnWiyow5UA8r7qipJe2avjaCaUNdn37XVZKgFFV99VL+cgweulij2RAAAAABJRU5ErkJggg==" alt="QR Telegram @ilove_dev" width="148" height="148">
-          </div>
-          <div class="qr-meta">
-            <div class="contact-label">Сканируй Telegram</div>
-            <div class="contact-value">@ilove_dev</div>
-          </div>
+          <span class="magnetic-inner">
+            <div class="qr-frame">
+              <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQMAAAEDAQAAAAAZqlxmAAACDklEQVR4nO1ZQa6cMAx9DpWYHXODzE3SmxFuBjcJN4AdIwGvspnp73TRr99SiYnwApRgRU6c52cbIf4svftEATg1XuU8j1c5z+P/nMcoKhegE4pce4lYbMrlduogOXiSc0ky2lR4jCgk01EsdbtpdOrGUYQopio9R/GAlu6p0fB+gSePb+kOGiG6YhpvnfzDGm+gEbgC8C1WlEyoAVRPFB/L0h00ehH5pvClWy7jTafuGpO/ssbbxOSHDFsw1gitwfghKT8GagGUZFtvo5qzfqqz3C0TsBbq27gCVQoR+OnilF0uFRjdcqmSDccbas73K4D1aJbug9sWwgme0bIL1KI3OcQsb/LgGY16QuSs1LOFp1xxS1Jx69vaXKwxC8gRt3gyzS/U02p2kWVMdturQTFpkgHNLoIIp4rML7twGpNvgFvEp8C1mIDOGKgXHs7Svepb2XIpGN/aNg3FWd7kTlbj22bdPC2zFgf58a2zZ4goRgkNnVXzkeV4RZBsbzK2PFk2vtUPXlOOzG4yPqqdwTPS+FYBOwD57dZ99ByrpBMK2AbLRfk2T9x6zS6sC2fVvKJYs+b8OqzOntZlhHZqjG+pbWV01r45mKX7afS1YBHf1VEB233/mzXeo3chc6lxyUSLehtllyfjt38Fhda3295zrW+hovsjrRzQMjfLGkjOv9WH9Is7NV7kPA+8yA/jl5z56alK+AAAAABJRU5ErkJggg==" alt="QR Telegram @ilove_dev" width="148" height="148">
+            </div>
+            <div class="qr-meta">
+              <svg class="qr-telegram-icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .38z"/></svg>
+              <div class="contact-label">Сканируй Telegram</div>
+              <div class="contact-value">@ilove_dev</div>
+            </div>
+          </span>
         </a>
       </div>
     </section>
 
     <footer>
-      <p>© 2026 <span>Олег Лощенок</span> · Android Developer · Москва</p>
+      <p>© 2026 <span>Олег Лощенок</span> · Android Developer · Москва · <a href="#" download>Резюме (PDF)</a></p>
+      <p class="footer-made">Сделано с ♥ и Kotlin</p>
     </footer>
 
   </div>
@@ -1136,136 +1491,287 @@
     (function () {
       'use strict';
 
-      const isTouch = matchMedia('(hover: none), (pointer: coarse)').matches;
-      const prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var isTouch = matchMedia('(hover: none), (pointer: coarse)').matches;
+      var prefersReduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-      /* ── Custom Cursor ── */
-      const dot = document.getElementById('cursorDot');
-      const ring = document.getElementById('cursorRing');
-      let mx = 0, my = 0, rx = 0, ry = 0;
+      var dot = document.getElementById('cursorDot');
+      var ring = document.getElementById('cursorRing');
+      var bgCanvas = document.getElementById('bgCanvas');
+      var mx = 0, my = 0, rx = 0, ry = 0;
+      var scrollY = window.scrollY;
+      var ticking = false;
+      var parallaxCache = [];
+      var navCache = [];
+      var activeNavSection = '';
+      var heroParallaxX = 0;
+      var heroParallaxY = 0;
+      var heroParallaxFrame = false;
+      var cursorHover = false;
+      var cursorFocused = false;
+      var cursorTargets = 'a, button, [role="button"], input, select, textarea, .skill-tag, .achievement';
 
-      if (!isTouch && dot && ring) {
-        document.addEventListener('mousemove', e => {
+      // Initialize the custom pointer and delegate hover/focus states.
+      function initCustomCursor() {
+        if (isTouch || !dot || !ring) return;
+
+        function onMouseMove(e) {
           mx = e.clientX;
           my = e.clientY;
           dot.style.left = mx + 'px';
           dot.style.top = my + 'px';
-        });
+          scheduleRing();
+        }
 
         function animateRing() {
           rx += (mx - rx) * 0.15;
           ry += (my - ry) * 0.15;
           ring.style.left = rx + 'px';
           ring.style.top = ry + 'px';
+          if (Math.abs(mx - rx) + Math.abs(my - ry) > 0.5) {
+            requestAnimationFrame(animateRing);
+          } else {
+            ringFramePending = false;
+          }
+        }
+
+        var ringFramePending = false;
+
+        function scheduleRing() {
+          if (ringFramePending) return;
+          ringFramePending = true;
           requestAnimationFrame(animateRing);
         }
-        animateRing();
 
-        document.querySelectorAll('a, button, .btn, .skill-tag, .achievement, .contact-card, .qr-card').forEach(el => {
-          el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-          el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-        });
-      }
+        function syncCursorState() {
+          document.body.classList.toggle('cursor-hover', cursorHover || cursorFocused);
+          document.body.classList.toggle('cursor-focus', cursorFocused);
+        }
 
-      /* ── Magnetic buttons ── */
-      if (!isTouch) {
-        document.querySelectorAll('.magnetic').forEach(el => {
-          el.addEventListener('mousemove', e => {
-            const rect = el.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            el.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
-          });
-          el.addEventListener('mouseleave', () => {
-            el.style.transform = '';
-          });
-        });
-      }
-
-      /* ── Scroll Reveal ── */
-      const revealEls = document.querySelectorAll('.reveal');
-      const revealObserver = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            revealObserver.unobserve(entry.target);
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseover', function (e) {
+          var target = e.target.closest(cursorTargets);
+          if (target && !target.contains(e.relatedTarget)) {
+            cursorHover = true;
+            syncCursorState();
           }
         });
-      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+        document.addEventListener('focusin', function (e) {
+          cursorFocused = Boolean(e.target.closest(cursorTargets));
+          if (cursorFocused) syncCursorState();
+        });
+        document.addEventListener('focusout', function (e) {
+          cursorFocused = Boolean(e.relatedTarget && e.relatedTarget.closest(cursorTargets));
+          syncCursorState();
+        });
+        document.addEventListener('mouseout', function (e) {
+          var target = e.target.closest(cursorTargets);
+          if (target && !target.contains(e.relatedTarget)) {
+            cursorHover = false;
+            syncCursorState();
+          }
+        });
 
-      revealEls.forEach(el => revealObserver.observe(el));
+        document.body.classList.add('has-custom-cursor');
+      }
 
-      /* ── Parallax ── */
-      const parallaxEls = document.querySelectorAll('[data-parallax]');
-      let scrollY = 0;
-      let ticking = false;
+      // Move only the magnetic inner layer so reveal transforms stay intact.
+      function initMagnetic() {
+        if (isTouch) return;
 
+        document.querySelectorAll('.magnetic').forEach(function (el) {
+          var inner = el.querySelector('.magnetic-inner');
+          if (!inner) return;
+
+          el.addEventListener('mousemove', function (e) {
+            var rect = el.getBoundingClientRect();
+            var x = e.clientX - rect.left - rect.width / 2;
+            var y = e.clientY - rect.top - rect.height / 2;
+            inner.style.transform = 'translate(' + (x * 0.2) + 'px, ' + (y * 0.2) + 'px)';
+          });
+
+          el.addEventListener('mouseleave', function () {
+            inner.style.transform = '';
+          });
+        });
+      }
+
+      // Reveal content on intersection, with visible content as a fallback.
+      function initReveal() {
+        var revealEls = document.querySelectorAll('.reveal');
+        if (!('IntersectionObserver' in window)) {
+          revealEls.forEach(function (el) { el.classList.add('visible'); });
+          return;
+        }
+
+        var revealObserver = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+        revealEls.forEach(function (el) { revealObserver.observe(el); });
+      }
+
+      // Calculate document-space positions outside animation frames.
+      function getDocumentTop(el) {
+        var top = 0;
+        while (el) {
+          top += el.offsetTop;
+          el = el.offsetParent;
+        }
+        return top;
+      }
+
+      // Cache parallax geometry only during initialization and layout refreshes.
+      function cacheParallaxOffsets() {
+        parallaxCache = [];
+        document.querySelectorAll('[data-parallax]').forEach(function (el) {
+          parallaxCache.push({
+            el: el,
+            speed: parseFloat(el.dataset.parallax) || 0,
+            top: getDocumentTop(el),
+            height: el.offsetHeight
+          });
+        });
+      }
+
+      // Cache section starts so scroll handling avoids layout reads.
+      function cacheNavOffsets() {
+        navCache = Array.from(document.querySelectorAll('section[id]')).map(function (section) {
+          return { id: section.id, top: getDocumentTop(section) };
+        });
+      }
+
+      // Update cached parallax positions using scroll state only.
       function updateParallax() {
         if (prefersReduced) return;
-        parallaxEls.forEach(el => {
-          const speed = parseFloat(el.dataset.parallax) || 0;
-          const rect = el.getBoundingClientRect();
-          const offset = (rect.top + rect.height / 2 - innerHeight / 2) * speed;
-          el.style.transform = `translate3d(0, ${offset}px, 0)`;
+
+        parallaxCache.forEach(function (item) {
+          var offset = (item.top - scrollY - window.innerHeight / 2 + item.height / 2) * item.speed;
+          item.el.style.setProperty('--parallax-y', offset + 'px');
         });
-        ticking = false;
       }
 
-      /* ── Active nav link ── */
-      const sections = document.querySelectorAll('section[id]');
-      const navLinks = document.querySelectorAll('nav a');
+      // Offset ambient orbs by at most 15px without replacing their keyframe transforms.
+      function initHeroParallax() {
+        if (isTouch || prefersReduced) return;
 
+        var orbs = Array.from(document.querySelectorAll('.orb'));
+        var factors = [1, -0.7, 0.5];
+
+        document.addEventListener('mousemove', function (e) {
+          heroParallaxX = (e.clientX / window.innerWidth - 0.5) * 30;
+          heroParallaxY = (e.clientY / window.innerHeight - 0.5) * 30;
+          if (heroParallaxFrame) return;
+          heroParallaxFrame = true;
+          requestAnimationFrame(function () {
+            orbs.forEach(function (orb, index) {
+              var factor = factors[index] || 0.5;
+              orb.style.setProperty('--mouse-x', heroParallaxX * factor + 'px');
+              orb.style.setProperty('--mouse-y', heroParallaxY * factor + 'px');
+            });
+            heroParallaxFrame = false;
+          });
+        });
+      }
+
+      // Maintain the active link and aria-current as the viewport crosses sections.
       function updateNav() {
-        let current = '';
-        sections.forEach(section => {
-          const top = section.offsetTop - 120;
-          if (scrollY >= top) current = section.id;
+        var navLinks = document.querySelectorAll('nav a');
+        var current = navCache.length ? navCache[0].id : '';
+
+        navCache.forEach(function (section) {
+          if (scrollY >= section.top - 120) current = section.id;
         });
-        navLinks.forEach(link => {
-          link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+        if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2 && navCache.length) {
+          current = navCache[navCache.length - 1].id;
+        }
+
+        navLinks.forEach(function (link) {
+          var isActive = link.getAttribute('href') === '#' + current;
+          link.classList.toggle('active', isActive);
+          if (isActive) {
+            link.setAttribute('aria-current', 'true');
+            if (current !== activeNavSection) {
+              link.scrollIntoView({ inline: 'nearest', block: 'nearest' });
+            }
+          } else {
+            link.removeAttribute('aria-current');
+          }
+        });
+        activeNavSection = current;
+      }
+
+      // Tilt the inner card surface to keep the outer reveal transform untouched.
+      function initTilt() {
+        if (isTouch || prefersReduced) return;
+
+        document.querySelectorAll('.glass').forEach(function (card) {
+          var inner = card.querySelector('.tilt-inner');
+          if (!inner) return;
+
+          card.addEventListener('mousemove', function (e) {
+            var rect = card.getBoundingClientRect();
+            var x = (e.clientX - rect.left) / rect.width - 0.5;
+            var y = (e.clientY - rect.top) / rect.height - 0.5;
+            inner.style.transform = 'perspective(800px) rotateY(' + (x * 6) + 'deg) rotateX(' + (-y * 6) + 'deg) translateY(-6px)';
+          });
+
+          card.addEventListener('mouseleave', function () {
+            inner.style.transform = '';
+          });
         });
       }
 
-      window.addEventListener('scroll', () => {
+      // Schedule one visual update per animation frame while scrolling.
+      function onScroll() {
         scrollY = window.scrollY;
         if (!ticking) {
-          requestAnimationFrame(() => {
+          requestAnimationFrame(function () {
             updateParallax();
             updateNav();
             ticking = false;
           });
           ticking = true;
         }
-      }, { passive: true });
-
-      updateParallax();
-      updateNav();
-
-      /* ── Smooth scroll offset for fixed nav ── */
-      navLinks.forEach(link => {
-        link.addEventListener('click', e => {
-          e.preventDefault();
-          const target = document.querySelector(link.getAttribute('href'));
-          if (target) {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }
-        });
-      });
-
-      /* ── Tilt on glass cards ── */
-      if (!isTouch && !prefersReduced) {
-        document.querySelectorAll('.glass').forEach(card => {
-          card.addEventListener('mousemove', e => {
-            const rect = card.getBoundingClientRect();
-            const x = (e.clientX - rect.left) / rect.width - 0.5;
-            const y = (e.clientY - rect.top) / rect.height - 0.5;
-            card.style.transform = `perspective(800px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) translateY(-6px)`;
-          });
-          card.addEventListener('mouseleave', () => {
-            card.style.transform = '';
-          });
-        });
       }
+
+      var resizeTimer = null;
+
+      // Register passive scroll handling and debounced geometry refreshes.
+      function initScrollHandler() {
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('load', function () {
+          cacheParallaxOffsets();
+          cacheNavOffsets();
+          updateParallax();
+          updateNav();
+        }, { once: true });
+        window.addEventListener('resize', function () {
+          clearTimeout(resizeTimer);
+          resizeTimer = setTimeout(function () {
+            cacheParallaxOffsets();
+            cacheNavOffsets();
+            updateParallax();
+            updateNav();
+          }, 150);
+        });
+        cacheParallaxOffsets();
+        cacheNavOffsets();
+        updateParallax();
+        updateNav();
+      }
+
+      // Initialize independent effects first; enable the custom cursor last.
+      initMagnetic();
+      initReveal();
+      initHeroParallax();
+      initTilt();
+      initScrollHandler();
+      initCustomCursor();
     })();
   </script>
 </body>
